@@ -1,131 +1,118 @@
-#include<stdio.h>
+#include <stdio.h>
 int main(){
-	int row, col;
-	printf("Enter number of rows: ");
+	int row,col,size1=0,size2=0;
+	printf("Enter the no of row :");
 	scanf("%d",&row);
-	printf("Enter number of columns: ");
+	printf("Enter no of columns :");
 	scanf("%d",&col);
-	
 	int mat1[row][col],mat2[row][col];
-	printf("Enter elements of first matrix: \n");
-	for(int i=0;i<row;i++){
+	printf("\n");
+	printf("Enter elements of sparse matrix 1 :\n");
+	//enter elements
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
-			printf("Enter element at %d %d: ",i+1,j+1);
+			printf("Enter element %d%d :",i,j);
 			scanf("%d",&mat1[i][j]);
-		}
-	}
-	
-	printf("Enter elements of second matrix: \n");
-	for(int i=0;i<row;i++){
+			
+		}	
+	}	
+	printf("Enter elements of sparse matrix 2 :\n");
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
-			printf("Enter element at %d %d: ",i+1,j+1);
+			printf("Enter element %d%d :",i,j);
 			scanf("%d",&mat2[i][j]);
-		}
+		}	
 	}
-	
-	printf("First Matrix\n");
-	int size1=0,size2=0;
-	for(int i=0;i<row;i++){
+	//print elements
+	printf("The matrix are :\n");
+	printf("MATRIX 1\n");
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
 			printf("%d\t",mat1[i][j]);
 			if(mat1[i][j]!=0){
-				size1++;
-			}
-		}
-		printf("\n");
-	}
-	
-	printf("Second Matrix\n");
-	for(int i=0;i<row;i++){
+			        size1+=1;
+		}}
+		printf("\n");	
+	}	
+	printf("MATRIX 2\n");
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
 			printf("%d\t",mat2[i][j]);
 			if(mat2[i][j]!=0){
-				size2++;
-			}
-		}
-		printf("\n");
+			        size2+=1;
+		}}
+		printf("\n");	
 	}
-	
-	//Conversion from Sparse Matrix to Compact form
-	int comp1[size1][3], comp2[size2][3],row1=0,row2=0;
-	for(int i=0;i<row;i++){
+	int com1[size1][3],com2[size2][3],q=0;
+	//compact matrix initialization
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
 			if(mat1[i][j]!=0){
-				comp1[row1][0]=i;
-				comp1[row1][1]=j;
-				comp1[row1][2]=mat1[i][j];
-				row1++;
+			          com1[q][0]=i;
+			          com1[q][1]=j;
+			          com1[q][2]=mat1[i][j];
+			          q++;
+			    }
 			}
-		}
 	}
-	
-	for(int i=0;i<row;i++){
+	q=0;
+	for (int i=0;i<row;i++){
 		for(int j=0;j<col;j++){
 			if(mat2[i][j]!=0){
-				comp2[row2][0]=i;
-				comp2[row2][1]=j;
-				comp2[row2][2]=mat2[i][j];
-				row2++;
+			          com2[q][0]=i;
+			          com2[q][1]=j;
+			          com2[q][2]=mat2[i][j];
+			          q++;
+			    }
 			}
-		}
 	}
-	//First compact matrix
-	printf("First Compact Matrix\n");
-	for(int i=0;i<size1;i++){
-		for(int j=0;j<3;j++){
-			printf("%d\t",comp1[i][j]);
-		}
-		printf("\n");
-	}
-	
-	//Second compact matrix
-	printf("Second Compact Matrix\n");
-	for(int i=0;i<size2;i++){
-		for(int j=0;j<3;j++){
-			printf("%d\t",comp2[i][j]);
-		}
-		printf("\n");
-	}
-	
-	int size3=0;
-	if(size1>size2){
-		size3=size1;
-	}
-	else{
-		size3=size2;
-	}
-	
-	int result[row][col];
-	for(int i=0;i<row;i++){
-		for(int j=0;j<col;j++){
-			for(int k=0;k<size3;k++){
-				if(comp1[i][0]==i && comp1[i][1]==j){
-					result[i][j]=comp1[i][2];
-				}
-				else if(comp2[i][0]==i && comp2[i][1]==j){
-					result[i][j]=comp2[i][2];
-				}
-				else if ((comp1[i][0]==i && comp1[i][1]==j)&&(comp2[i][0]==i && comp2[i][1]==j)){
-					result[i][j]=comp1[i][2]+comp2[i][2];
-				}
-				else{
-					result[i][j]=0;
-				}
-			}
-		}
-	}
-	
-	printf("Resulting Compact Matrix\n");
-	for(int i=0;i<row;i++){
-		for(int j=0;j<col;j++){
-			printf("%d\t",result[i][j]);
-		}
-		printf("\n");
-	}
-	
-	
-	
+	//print compact matrix
+	printf("COMPACT 1\n");
+	for(int a=0;a<size1;a++){
+            for(int b=0;b<3;b++){
+              printf("%d\t",com1[a][b]);
+            }
+            printf("\n");
+        }
+        printf("COMPACT 2\n");
+	for(int a=0;a<size2;a++){
+            for(int b=0;b<3;b++){
+              printf("%d\t",com2[a][b]);
+            }
+            printf("\n");
+        }
+        //formation of result matrix
+        int res[row][col];
+        for(int i=0;i<row;i++){
+          for(int j=0;j<col;j++){
+            for(int k=0;k<size1;k++){
+                    if(com1[k][0]==i && com1[k][1]==j){
+                        res[i][j]=com1[k][2];
+                        break;
+                    }else{
+                        res[i][j]=0;
+                    }   
+            }
+            
+          }
+        }
+        for(int i=0;i<row;i++){
+           for(int j=0;j<col;j++){
+            for(int k=0;k<size2;k++){
+                if(com2[k][0]==i && com2[k][1]==j){
+                    res[i][j]+=com2[k][2];
+                }
+            }
+          }
+        }
+        //printing result matrix
+        printf("RESULT\n");
+        for(int i=0;i<row;i++){
+          for(int j=0;j<col;j++){
+              printf("%d\t",res[i][j]);
+            }
+            printf("\n");
+        }
+          
 	return 0;
 }
-	
-	
